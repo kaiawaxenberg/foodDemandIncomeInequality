@@ -46,12 +46,12 @@ ggplot(data=filter(regionDemand, Year==2100), aes(x=reorder(Region, -rebasedKcal
   scale_fill_brewer(palette="Set2")+
   theme_minimal()+
   theme(
-    strip.text.x = element_text(size = 16),
-    strip.text.y = element_text(size = 16), 
-    text = element_text(size=16),
-    axis.text.x = element_text(size = 14),
+    strip.text.x = element_text(size = 14),
+    strip.text.y = element_text(size = 14), 
+    text = element_text(size=14),
+    axis.text.x = element_text(size = 13),
     axis.text.y = element_text(size = 12),
-    legend.text = element_text(size = 14))+
+    legend.text = element_text(size = 12))+
   theme(axis.text.x = element_text(angle = 75, hjust = 1))
 
 #Generate Figure 1
@@ -80,12 +80,12 @@ ggplot(data=totalKcal %>% filter(Year==2100), aes(x=decile, fill=reorder(name, -
   theme(plot.title = element_text(hjust = 0.5, size = 14), text=element_text(size = 12))+
   theme(axis.text.x = element_text(size=8), axis.text.y = element_text(size=8), legend.position="bottom")+
   theme(
-    strip.text.x = element_text(size = 16),
-    strip.text.y = element_text(size = 16), 
-    text = element_text(size=16),
+    strip.text.x = element_text(size = 14),
+    strip.text.y = element_text(size = 14), 
+    text = element_text(size=14),
     axis.text.x = element_text(size = 12),
     axis.text.y = element_text(size = 12),
-    legend.text = element_text(size = 16)
+    legend.text = element_text(size = 13)
   )+
   theme(
     panel.grid.major.x = element_blank(),
