@@ -91,12 +91,11 @@ ggplot(data=plotData, aes(x=Year, y = value, linetype = sce, color = Ensemble)) 
   #ylim(0,NA)+
   theme(panel.border = element_rect(color = "lightgray", fill = NA))+
   theme(
-    strip.text.x = element_text(size = 13),
-    strip.text.y = element_text(size = 13),
-    text = element_text(size=12),
-    axis.text.x = element_text(size = 11),
-    axis.text.y = element_text(size = 11),
-    legend.text = element_text(size = 12))
+    strip.text = element_text(size = 15),
+    text = element_text(size=14),
+    axis.text.x = element_text(size = 12),
+    axis.text.y = element_text(size = 12),
+    legend.text = element_text(size = 14))
 
 ########Compare total Global Demand#############
 
@@ -171,12 +170,11 @@ ggplot(data=plotData, aes(x=Year, y = percDiff, color=Commodity, fill=Commodity)
   geom_hline(yintercept = 0, color = "#333333", linetype="dashed")+
   theme_minimal()+
   theme(
-    strip.text.x = element_text(size = 14),
-    strip.text.y = element_text(size = 14), 
-    text = element_text(size=13),
+    strip.text = element_text(size = 16), 
+    text = element_text(size=16),
     axis.text.x = element_text(size = 12),
     axis.text.y = element_text(size = 12),
-    legend.text = element_text(size = 12))+
+    legend.text = element_text(size = 14))+
   facet_wrap(~Ensemble)+
   scale_color_hue(labels=c("No inequality" = "Average Income", "Inequality"="Income deciles"))+
   scale_fill_hue(labels=c("No inequality" = "Average Income", "Inequality"="Income deciles"))+
@@ -210,12 +208,10 @@ ggplot(data=plotData, aes(x=Ensemble, y = percDiff ,fill = Commodity)) +
   theme_minimal()+
   facet_wrap(~Commodity, ncol=4)+
   theme(
-    strip.text.x = element_text(size = 14),
-    strip.text.y = element_text(size = 14), 
-    text = element_text(size=13),
-    axis.text.x = element_text(size = 12),
-    axis.text.y = element_text(size = 12),
-    legend.text = element_text(size = 12))+
+    strip.text = element_text(size = 16),
+    text = element_text(size=14),
+    axis.text.x = element_text(size = 14),
+    axis.text.y = element_text(size = 14))+
   theme(legend.position = "none")+
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
