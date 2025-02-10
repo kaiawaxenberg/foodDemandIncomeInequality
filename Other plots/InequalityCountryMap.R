@@ -66,8 +66,6 @@ regions = read.csv("Data/inputs/all.csv")
 inequality = left_join(inequality, regions, join_by(ISO == alpha.3)) %>% select(ISO, sce, year, gini, sub.region, region, name, Area, PlumGroup) %>% 
   ungroup() %>% rename(countryName=name)
 ssp = read.csv("Data/inputs/ssp.csv")
-inequality_change = inequality %>% group_by(Area, sce, ISO) %>%
-  summarise(giniChange = gini[year==2100] - gini[year==2020])
 
 #Fill in missing country data
 countriesToAdd = setdiff(ssp$Iso3, inequality_change$ISO)
@@ -123,6 +121,8 @@ ggplot() +
   theme(plot.title = element_text(hjust = 0.5, size = 20), text=element_text(size = 15))
 
 #Plot a map on change in Gini coefficients from 2020-2100
+inequality_change = inequality %>% group_by(Area, sce, ISO) %>%
+  summarise(giniChange = gini[year==2100] - gini[year==2020])
 map_data <- merge(world_map, inequality_change, by.x = "region", by.y = "Area", all.x = TRUE) %>% filter(!is.na(sce))
 ggplot() +
   geom_map( 

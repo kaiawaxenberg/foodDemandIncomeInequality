@@ -20,10 +20,10 @@ ggplot(data = demand, aes(x=ssp, y = proj)) +
        color = "")+
   theme_minimal()+
   theme(
-    text = element_text(size=16),
+    text = element_text(size=13),
     axis.text.x = element_text(size = 12),
     axis.text.y = element_text(size = 12),
-    legend.text = element_text(size = 16)
+    legend.text = element_text(size = 13)
   )+
   theme(strip.text.x = element_text(size = 14))+
   theme(panel.border = element_rect(color = "grey", fill=NA))+

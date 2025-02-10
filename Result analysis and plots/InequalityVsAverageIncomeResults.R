@@ -55,7 +55,7 @@ plotLcWithSd = function(df, column, sdColumn, name) {
     scale_color_hue(labels=c("No inequality" = "Average Income", "Inequality"="Inequality"))+
     scale_fill_hue(labels=c("No inequality" = "Average Income", "Inequality"="Inequality"))+
     labs(fill = "Modelling approach", color = "Modelling approach")+
-    ylim(0,NA)+
+    #ylim(0,NA)+
     theme(panel.border = element_rect(color = "lightgray", fill = NA))+
     theme(plot.title = element_text(hjust = 0.5, size = 14), text=element_text(size = 11))
 }
@@ -65,6 +65,38 @@ plotLcWithSd(lc_combined, lc_combined$Cropland, lc_combined$sdCropland, "Croplan
 plotLcWithSd(lc_combined, lc_combined$Pasture, lc_combined$sdPasture, "Pasture Area (Mha)")
 plotLcWithSd(lc_combined, lc_combined$FertCrop, lc_combined$sdFertCrop, "Nitrogen Application (Mt)")
 plotLcWithSd(lc_combined, lc_combined$IrrigCrop, lc_combined$sdIrrigCrop, "Irrigation Water Withdrawal (km3)")
+
+
+#Plot of land data for SI
+plotData = lc_combined %>% pivot_longer(cols = c(Cropland, Pasture, IrrigCrop, FertCrop), names_to = "Variable", values_to = "value")%>%
+  pivot_longer(cols = c(sdCropland,sdPasture,sdIrrigCrop,sdFertCrop),names_to = "Variable_SD",values_to = "sd") %>%
+  mutate(Variable_SD = gsub("sd", "", Variable_SD)) %>%
+  filter(Variable == Variable_SD) %>% 
+  select(-Variable_SD) %>% mutate(Variable = case_when(Variable == "Cropland"~"Cropland area (Mha)",
+                                                       Variable == "Pasture"~"Pasture area (Mha)",
+                                                         Variable == "FertCrop"~"Nitrogen application (Mt)",
+                                                         Variable == "IrrigCrop"~"Irrigation water withdrawal (km3)"))%>%
+  mutate(Variable = factor(Variable, levels = c("Cropland area (Mha)", "Pasture area (Mha)", "Nitrogen application (Mt)", "Irrigation water withdrawal (km3)")))
+
+ggplot(data=plotData, aes(x=Year, y = value, linetype = sce, color = Ensemble)) +
+  geom_line(linewidth=0.7) + 
+  geom_ribbon(aes(y = value, ymin = value - sd, ymax = value + sd, fill = Ensemble), color=NA, alpha = .06)+
+  labs(x = "Year",
+       y ="Model projection value")+
+  theme_minimal()+
+  facet_wrap(~Variable, scales = "free_y")+
+  scale_color_brewer(labels=c("No inequality" = "Average Income", "Inequality"="Inequality"),palette="Set1")+
+  scale_fill_brewer(labels=c("No inequality" = "Average Income", "Inequality"="Inequality"),palette="Set1")+
+  labs(fill = "SSP scenario", color = "SSP scenario",linetype="Model approach")+
+  #ylim(0,NA)+
+  theme(panel.border = element_rect(color = "lightgray", fill = NA))+
+  theme(
+    strip.text.x = element_text(size = 13),
+    strip.text.y = element_text(size = 13),
+    text = element_text(size=12),
+    axis.text.x = element_text(size = 11),
+    axis.text.y = element_text(size = 11),
+    legend.text = element_text(size = 12))
 
 ########Compare total Global Demand#############
 
@@ -139,12 +171,12 @@ ggplot(data=plotData, aes(x=Year, y = percDiff, color=Commodity, fill=Commodity)
   geom_hline(yintercept = 0, color = "#333333", linetype="dashed")+
   theme_minimal()+
   theme(
-    strip.text.x = element_text(size = 16),
-    strip.text.y = element_text(size = 16), 
-    text = element_text(size=16),
+    strip.text.x = element_text(size = 14),
+    strip.text.y = element_text(size = 14), 
+    text = element_text(size=13),
     axis.text.x = element_text(size = 12),
     axis.text.y = element_text(size = 12),
-    legend.text = element_text(size = 14))+
+    legend.text = element_text(size = 12))+
   facet_wrap(~Ensemble)+
   scale_color_hue(labels=c("No inequality" = "Average Income", "Inequality"="Income deciles"))+
   scale_fill_hue(labels=c("No inequality" = "Average Income", "Inequality"="Income deciles"))+
@@ -178,11 +210,12 @@ ggplot(data=plotData, aes(x=Ensemble, y = percDiff ,fill = Commodity)) +
   theme_minimal()+
   facet_wrap(~Commodity, ncol=4)+
   theme(
-    strip.text.x = element_text(size = 18),
-    strip.text.y = element_text(size = 18), 
-    text = element_text(size=16),
-    axis.text.x = element_text(size = 16),
-    axis.text.y = element_text(size = 16))+
+    strip.text.x = element_text(size = 14),
+    strip.text.y = element_text(size = 14), 
+    text = element_text(size=13),
+    axis.text.x = element_text(size = 12),
+    axis.text.y = element_text(size = 12),
+    legend.text = element_text(size = 12))+
   theme(legend.position = "none")+
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 

@@ -107,8 +107,6 @@ ggplot(data=plotData, aes(x=commodity, fill = Scenario, y=diff)) +
 
 rm(plotData)
 
-
-
 ##### Look at initial gini coefficient
 #calculate startGinis from gdpPcDistribution.R
 giniBaseline = read.csv("Data/inputs/giniBaseline.csv") %>%
