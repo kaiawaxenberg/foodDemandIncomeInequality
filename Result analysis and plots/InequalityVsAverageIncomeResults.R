@@ -170,11 +170,11 @@ ggplot(data=plotData, aes(x=Year, y = percDiff, color=Commodity, fill=Commodity)
   geom_hline(yintercept = 0, color = "#333333", linetype="dashed")+
   theme_minimal()+
   theme(
-    strip.text = element_text(size = 16), 
-    text = element_text(size=16),
+    strip.text = element_text(size = 18), 
+    text = element_text(size=18),
     axis.text.x = element_text(size = 12),
-    axis.text.y = element_text(size = 12),
-    legend.text = element_text(size = 14))+
+    axis.text.y = element_text(size = 14),
+    legend.text = element_text(size = 16))+
   facet_wrap(~Ensemble)+
   scale_color_hue(labels=c("No inequality" = "Average Income", "Inequality"="Income deciles"))+
   scale_fill_hue(labels=c("No inequality" = "Average Income", "Inequality"="Income deciles"))+
@@ -208,8 +208,8 @@ ggplot(data=plotData, aes(x=Ensemble, y = percDiff ,fill = Commodity)) +
   theme_minimal()+
   facet_wrap(~Commodity, ncol=4)+
   theme(
-    strip.text = element_text(size = 16),
-    text = element_text(size=14),
+    strip.text = element_text(size = 18),
+    text = element_text(size=18),
     axis.text.x = element_text(size = 14),
     axis.text.y = element_text(size = 14))+
   theme(legend.position = "none")+

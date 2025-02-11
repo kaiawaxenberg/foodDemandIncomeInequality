@@ -20,10 +20,10 @@ ggplot(data = demand, aes(x=ssp, y = proj)) +
        color = "")+
   theme_minimal()+
   theme(
-    text = element_text(size=13),
-    axis.text.x = element_text(size = 12),
-    axis.text.y = element_text(size = 12),
-    legend.text = element_text(size = 13)
+    text = element_text(size=18),
+    axis.text.x = element_text(size = 16),
+    axis.text.y = element_text(size = 14),
+    legend.text = element_text(size = 18)
   )+
   theme(strip.text.x = element_text(size = 14))+
   theme(panel.border = element_rect(color = "grey", fill=NA))+
@@ -31,3 +31,4 @@ ggplot(data = demand, aes(x=ssp, y = proj)) +
         strip.text = element_text(color = "black"))+
   scale_color_manual(values = "cornflowerblue", labels = "This Study")+
   facet_wrap(~year)
+

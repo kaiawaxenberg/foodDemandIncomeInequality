@@ -56,7 +56,7 @@ ggplot() +
        caption = "")+
   facet_wrap(~SSP)+
   scale_fill_gradient2(labels=label_comma(), low = "#f7fcfd", mid="#deebf7" , high ="#811b7c")+
-  theme(plot.title = element_text(hjust = 0.5, size = 14), text=element_text(size = 14))
+  theme(strip.text=element_text(size=16),text=element_text(size = 16))
 
 #################Plot map of inequality for each SSP########################
 
@@ -68,8 +68,8 @@ inequality = left_join(inequality, regions, join_by(ISO == alpha.3)) %>% select(
 ssp = read.csv("Data/inputs/ssp.csv")
 
 #Fill in missing country data
-countriesToAdd = setdiff(ssp$Iso3, inequality_change$ISO)
-for(scenario in unique(inequality_change$sce)){
+countriesToAdd = setdiff(ssp$Iso3, inequality$ISO)
+for(scenario in unique(inequality$sce)){
   for(country in countriesToAdd){
     avgRegion = regions[which(regions$alpha.3==country),]$sub.region
     regionData = inequality %>% filter(sub.region == avgRegion, sce==scenario)
@@ -118,7 +118,7 @@ ggplot() +
   facet_wrap(~sce)+
   labs(title = "", fill = "Gini coefficient", 
        caption = "")+
-  theme(plot.title = element_text(hjust = 0.5, size = 20), text=element_text(size = 15))
+  theme(strip.text=element_text(size=16),text=element_text(size = 16))
 
 #Plot a map on change in Gini coefficients from 2020-2100
 inequality_change = inequality %>% group_by(Area, sce, ISO) %>%
@@ -134,4 +134,4 @@ ggplot() +
   facet_wrap(~sce)+
   labs(title = "", fill = "Change in Gini", 
        caption = "")+
-  theme(plot.title = element_text(hjust = 0.5, size = 20), text=element_text(size = 15))
+  theme(strip.text=element_text(size=16),text=element_text(size = 16))
