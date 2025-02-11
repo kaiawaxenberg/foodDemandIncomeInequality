@@ -154,6 +154,17 @@ write.csv(downscaled_minus0.1, file = "Data/inputs/sensitivity_files/giniMinus0.
 
 #For SI mapts, compute and save gini coefficients by country for all SSPs, years, and countries
 decileShares = read.csv("Data/inputs/narayan_deciles.csv") %>% mutate(decile = as.double(substring(Category, 2)))
+compute_gini_deciles<- function(df){
+  
+  df = df %>% 
+    mutate(share_of_richer_pop = 1 - 0.1*decile) %>% 
+    mutate(score = pred_shares *(0.1+ (2*share_of_richer_pop))) %>%   
+    group_by(ISO, year,sce) %>% 
+    mutate(gini= 1- sum(score)) %>% # the gini coefficient is 1 - the area under the lorenz curve
+    ungroup()
+  
+  return(df)}
+
 giniAll = compute_gini_deciles(decileShares)%>% na.omit() %>% 
   select(ISO, year, sce, gini) %>% distinct()
 write.csv(giniAll, file = "Data/inputs/sspGinis.csv", row.names=FALSE)
