@@ -30,5 +30,7 @@ ggplot(data = demand, aes(x=ssp, y = proj)) +
   theme(strip.background = element_rect(color = "grey", fill=NA),
         strip.text = element_text(color = "black"))+
   scale_color_manual(values = "cornflowerblue", labels = "This Study")+
-  facet_wrap(~year)
+  facet_wrap(~year)+
+  theme(legend.position = "bottom")
+
 

@@ -35,23 +35,23 @@ regionDemand = countryDemandOpt %>% group_by(Region, SSP, Year, commodity) %>%
 ###################Generate Figures###################
 
 #Generate Figure from SI1
-ggplot(data=filter(regionDemand, Year==2100), aes(x=reorder(Region, -rebasedKcal), y=rebasedKcal, fill=reorder(commodity, rebasedKcal))) +
+ggplot(data=filter(regionDemand, Year==2100), aes(y=reorder(Region, -rebasedKcal), x=rebasedKcal, fill=reorder(commodity, rebasedKcal))) +
   geom_col(data = filter(globalDemand, Year==2100)) + 
   geom_col() + 
-  labs(x = "",
-       y = "Food Demand (kcal/cap/day)",
+  labs(y = "",
+       x = "Food Demand (kcal/cap/day)",
        fill = "Commodity")+
-  theme_light()+
   facet_wrap(~SSP)+
   scale_fill_brewer(palette="Set2")+
   theme_minimal()+
   theme(
-    strip.text = element_text(size = 16),
-    text = element_text(size=14),
-    axis.text.x = element_text(size = 13),
+    strip.text = element_text(size = 12),
+    text = element_text(size=12),
+    axis.text.x = element_text(size = 12),
     axis.text.y = element_text(size = 12),
-    legend.text = element_text(size = 12))+
-  theme(axis.text.x = element_text(angle = 75, hjust = 1))
+    axis.ticks.x = element_line(color = "gray"),
+    legend.text = element_text(size = 11))+
+  theme(axis.text.x = element_text(angle = 45, hjust = 0.75))
 
 #Generate Figure 1
 totalKcal = totalKcal %>% mutate(RegionLab = gsub("^((\\S+\\s+\\S+\\s+))", "\\1\n", Region)) %>%
