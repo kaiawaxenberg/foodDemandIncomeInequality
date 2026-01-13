@@ -62,7 +62,6 @@ avg_data = totalKcal %>% filter(Year==2100) %>% group_by(RegionLab, SSP, decile)
                           name=="animalKcal"~ value)) %>% group_by(RegionLab, SSP, name)%>%
   summarise(value = mean(value)) 
 
-
 ggplot(data=totalKcal %>% filter(Year==2100), aes(x=decile, fill=reorder(name, -value), y=value)) +
   geom_col(width = 0.84, position="stack") +
   geom_hline(data = avg_data, aes(yintercept = value,color = "Regional average"), 
@@ -76,19 +75,17 @@ ggplot(data=totalKcal %>% filter(Year==2100), aes(x=decile, fill=reorder(name, -
   scale_fill_brewer(palette="Set2", labels = c("animalKcal" = "Animal-based", "otherKcal" = "Plant-based"))+
   facet_grid(SSP~RegionLab, labeller = labeller(label_wrap_gen(width = 5)))+
   scale_x_continuous(breaks = c(2,4,6, 8, 10))+
-  theme(plot.title = element_text(hjust = 0.5, size = 14), text=element_text(size = 12))+
-  theme(axis.text.x = element_text(size=8), axis.text.y = element_text(size=8), legend.position="bottom")+
-  theme(
-    strip.text = element_text(size = 14),
-    text = element_text(size=16),
-    axis.text.x = element_text(size = 14),
-    axis.text.y = element_text(size = 11),
-    legend.text = element_text(size = 14)
-  )+
-  theme(
-    panel.grid.major.x = element_blank(),
-    panel.grid.minor.x = element_blank()
-  )
+  theme(legend.position="bottom",
+        strip.text = element_text(size = 16),
+        text = element_text(size=16),
+        axis.text.x = element_text(size = 11, angle = 35, hjust = 1),
+        axis.text.y = element_text(size = 11),
+        legend.text = element_text(size = 14),
+        panel.grid.major.y = element_blank(),
+        panel.grid.minor.y = element_blank(),
+        axis.ticks.x = element_line(linewidth = 0.6)
+  )+ 
+  coord_flip()
 
 ###################For comparison to other studies###################
 
