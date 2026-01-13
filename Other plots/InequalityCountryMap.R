@@ -135,3 +135,20 @@ ggplot() +
   labs(title = "", fill = "Change in Gini", 
        caption = "")+
   theme(strip.text=element_text(size=16),text=element_text(size = 16))
+
+############Plot time series of historic Gini coefficients######################
+
+#Load Narayan, 2023 ISO-level dataset
+historic_inequality = read.csv("Data/inputs/Final_Historical_data_ISO.csv") |>
+  filter(Category =="d1") |>
+  #Filter to most populated countries with full time series
+  filter(country %in% c("Brazil", "China", "India", "Indonesia", "Japan", 
+                        "United States of America", "Russian Federation"))
+
+ggplot(historic_inequality, aes(x = year, y = as.numeric(gini_recalculated)))+
+  geom_line(size = 1) +
+  labs(x = "Year",
+       y = "Gini Coefficient") +
+  theme_minimal()+
+  facet_wrap(~country)
+

@@ -93,7 +93,9 @@ rm(incomeGroups)
 
 ##### PLOT COMMODITY DEMAND BY INCOME GROUP #####
 plotData = countryIncomeKcal %>% filter(Year ==2070, IncomeGroup !=0, Scenario!="noChange") %>% group_by(commodity, IncomeGroup, Scenario)%>%
-  summarise(ref = mean(refKcal), rebasedKcal = mean(rebasedKcal), diff = (rebasedKcal - ref))
+  summarise(ref = weighted.mean(refKcal, population), 
+            rebasedKcal = weighted.mean(rebasedKcal, population), 
+            diff = (rebasedKcal - ref))
 
 ggplot(data=plotData, aes(x=commodity, fill = Scenario, y=diff)) +
   geom_bar(position="dodge", stat="identity")+
@@ -121,8 +123,10 @@ kcalWithGini = kcalWithInitialGini %>% mutate(change = as.double(gsub("[^0-9.-]"
   mutate(gini = startGini + (change/50)*(Year-2020)) %>% filter(!is.na(gini))
 
 #by global commodity demand
-kcalWithGiniCommodityGlobal = kcalWithGini %>% group_by(commodity, Scenario, Year) %>% summarise(gini = mean(gini), rebasedKcal = mean(rebasedKcal))
-ggplot(data=kcalWithGiniCommodityGlobal, aes(x= gini, y=rebasedKcal, color=commodity)) +
+kcalWithGiniCommodityGlobal = kcalWithGini %>% group_by(commodity, Scenario, Year) %>% 
+  summarise(gini = weighted.mean(gini, population), 
+            rebasedKcal = weighted.mean(rebasedKcal, population))
+ggplot(data=kcalWithGiniCommodityGlobal, aes(x= gini, y=rebasedKcal, color = Scenario)) +
   geom_point()+
   labs(x = "Average Global Gini Coefficient",
        y = "Demand (kcal/cap/day)") + 

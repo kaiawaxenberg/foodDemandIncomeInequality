@@ -196,23 +196,34 @@ plotData = totalDemand_combined %>% mutate(Commodity="All commodities") %>%
   mutate(diff=(meanKcal_IncomeDeciles - meanKcal_AverageIncome)) %>%
   mutate(diffSD = sqrt((sdKcal_IncomeDeciles)^2 + (sdKcal_AverageIncome)^2))
 
+commodityScale = c(
+  "Pulses" = "#66C2A5",
+  "Monogastrics" = "#FC8D62",
+  "Sugar" = "#8DA0CB",
+  "Ruminants" = "#E78AC3",
+  "Fruit & Veg" = "#A6D854",
+  "Oilcrops" = "#FFD92F",
+  "Starchy staples" = "#E5C494",
+  "All commodities" = "#9EB9D4"
+  )
+
 ggplot(data=plotData, aes(x=Ensemble, y = percDiff ,fill = Commodity)) +
   geom_bar(stat = "identity", position = position_dodge(width = 0.9)) +
   geom_hline(yintercept = 0, color = "black") +  # Darker horizontal line at y = 0
   geom_errorbar(aes(ymin = percDiff - percDiffSD, ymax = percDiff + percDiffSD), 
                 position = position_dodge(width = 0.9), 
-                width = 0.25, color="darkgrey") +
+                width = 0.25, color="#3C3C3C") +
   labs(x = "Scenario",
        y = "Model Difference in 2100 (%)",
        fill = "Commodity")+
-  scale_fill_brewer(palette="Set2")+
+  scale_fill_manual(values = commodityScale)+
   theme_minimal()+
   facet_wrap(~Commodity, ncol=4)+
   theme(
-    strip.text = element_text(size = 18),
-    text = element_text(size=18),
-    axis.text.x = element_text(size = 14),
-    axis.text.y = element_text(size = 14))+
+    strip.text = element_text(size = 14),
+    text = element_text(size=14),
+    axis.text.x = element_text(size = 12),
+    axis.text.y = element_text(size = 12))+
   theme(legend.position = "none")+
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
