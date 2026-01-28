@@ -26,7 +26,11 @@ totalKcal = countryDemandOpt %>% group_by(Country, decile, SSP, Year, population
 
 #Calculate average global calorie demand by commodity 
 globalDemand = countryDemandOpt %>% group_by(SSP, Year, commodity) %>%
-  summarise(rebasedKcal = weighted.mean(rebasedKcal, population)) %>% mutate(Region = "World")
+  summarise(rebasedKcal = weighted.mean(rebasedKcal, population)) %>% 
+  group_by(SSP, Year)%>%
+  filter(Year==2050)%>%
+  summarise(otherKcal = sum(rebasedKcal[which(!(commodity %in% c("Ruminants","Monogastrics")))]), animalKcal=sum(rebasedKcal[which(commodity %in% c("Ruminants","Monogastrics"))])) %>% 
+  mutate(Region = "World") 
 
 #Calculate demand across deciles by region and commodity
 regionDemand = countryDemandOpt %>% group_by(Region, SSP, Year, commodity) %>%
@@ -56,7 +60,15 @@ ggplot(data=filter(regionDemand, Year==2100), aes(y=reorder(Region, -rebasedKcal
 #Generate Figure 1
 totalKcal = totalKcal %>% mutate(RegionLab = gsub("^((\\S+\\s+\\S+\\s+))", "\\1\n", Region)) %>%
   mutate(RegionLab = case_when(RegionLab=="Sub-Saharan Africa" ~ "Sub-Saharan \n Africa", 
-         TRUE ~ RegionLab))
+         TRUE ~ RegionLab)) %>%
+  mutate(SSP = case_match(SSP,
+    "SSP1" ~ "SSP1\n'Sustainability'",
+    "SSP2" ~ "SSP2\n'Middle of the\nRoad'",
+    "SSP3" ~ "SSP3\n'Regional\nRivalry'",
+    "SSP4" ~ "SSP4\n'Inequality'",
+    "SSP5" ~ "SSP5\n'Fossil-Fueled\nDevelopment'"
+  ))
+
 avg_data = totalKcal %>% filter(Year==2100) %>% group_by(RegionLab, SSP, decile) %>% 
   mutate(value= case_when(name=="otherKcal" ~ sum(value),
                           name=="animalKcal"~ value)) %>% group_by(RegionLab, SSP, name)%>%
@@ -77,6 +89,7 @@ ggplot(data=totalKcal %>% filter(Year==2100), aes(x=decile, fill=reorder(name, -
   scale_x_continuous(breaks = c(2,4,6, 8, 10))+
   theme(legend.position="bottom",
         strip.text = element_text(size = 16),
+        strip.text.y = element_text(size=16, angle = 0),
         text = element_text(size=16),
         axis.text.x = element_text(size = 11, angle = 35, hjust = 1),
         axis.text.y = element_text(size = 11),
@@ -87,6 +100,42 @@ ggplot(data=totalKcal %>% filter(Year==2100), aes(x=decile, fill=reorder(name, -
   )+ 
   coord_flip()
 
+###################Population at risk of under-nutrition###################
+lowAccessDecile = countryDemandOpt %>% 
+  filter(Year==2050) %>%
+  group_by(Country, decile, SSP, Year, population) %>%
+  summarise(rebasedKcal = sum(rebasedKcal)) %>%
+  mutate(lowAccess = ifelse(rebasedKcal>=2000, FALSE, TRUE)) %>%
+  group_by(lowAccess, SSP) %>%
+  summarise(population = sum(population))
+
+lowAccessCountry = countryDemandOpt %>% 
+  filter(Year==2020) %>%
+  group_by(Country, decile, SSP, Year, population) %>%
+  summarise(rebasedKcal = sum(rebasedKcal)) %>%
+  group_by(Country, SSP, Year) %>%
+  summarise(rebasedKcal = mean(rebasedKcal), population = sum(population)) %>%
+  mutate(lowAccess = ifelse(rebasedKcal>=2000, FALSE, TRUE)) %>%
+  group_by(lowAccess, SSP) #%>%
+  summarise(population = sum(population))
+
+###################Increase in kcal access###################
+  
+kcalRise = countryDemandOpt %>% 
+    filter(Year==2100 | Year ==2020) %>%
+    filter(SSP=="SSP2") %>%
+    group_by(Country, decile, SSP, Year) %>%
+    summarise(rebasedKcal = sum(rebasedKcal)) %>%
+    group_by(Country, SSP, decile) %>%
+    mutate(kcalRise = rebasedKcal[2]-rebasedKcal[1])
+  
+kcalDiff = countryDemandOpt %>% 
+  filter(Year==2100 | Year ==2020| Year ==2050) %>%
+  filter(SSP=="SSP2") %>%
+  group_by(Country, decile, SSP, Year) %>%
+  summarise(rebasedKcal = sum(rebasedKcal)) %>%
+  group_by(Country, SSP, Year) %>%
+  mutate(kcalDiff= rebasedKcal[10]-rebasedKcal[1])
 ###################For comparison to other studies###################
 
 #For comparison to Martinez (2024)

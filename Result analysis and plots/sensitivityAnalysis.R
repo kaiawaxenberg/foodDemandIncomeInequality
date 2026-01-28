@@ -21,6 +21,11 @@ for (scenario in scenarios){
   rm(demandOptTemp, demandTemp, lcTemp)
 }
 
+#### Look the average global diet for GHG estimation ###########
+globalKcal = countryDemandOpt %>%
+  group_by(Year, Scenario, commodity) %>% 
+  summarise(rebasedKcal = weighted.mean(rebasedKcal, population))
+
 ##### Plot global food demand by sensitivity scenario #####
 countryDiet = countryDemandOpt %>% group_by(Country, Year, decile, population, Scenario) %>% summarise(rebasedKcal = sum(rebasedKcal))
 totalGlobalKcal = countryDiet %>% group_by(Year, Scenario) %>% summarise(rebasedKcal = weighted.mean(rebasedKcal, population)) %>%  mutate(YearNo = Year -2019) 

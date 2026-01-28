@@ -158,7 +158,13 @@ plotData = commodityDemand %>%
   mutate(percDiff=100*(meanKcal_IncomeDeciles - meanKcal_AverageIncome)/meanKcal_AverageIncome) %>%
   mutate(percDiffSD = sqrt((sdKcal_IncomeDeciles / meanKcal_AverageIncome)^2 + ((meanKcal_IncomeDeciles - meanKcal_AverageIncome) * sdKcal_AverageIncome / meanKcal_AverageIncome^2)^2) * 100) %>%
   mutate(diff=(meanKcal_IncomeDeciles - meanKcal_AverageIncome)) %>%
-  mutate(diffSD = sqrt((sdKcal_IncomeDeciles)^2 + (sdKcal_AverageIncome)^2))
+  mutate(diffSD = sqrt((sdKcal_IncomeDeciles)^2 + (sdKcal_AverageIncome)^2)) %>%
+  mutate(Ensemble = case_match(Ensemble, 
+                               "SSP1" ~ "SSP1:\nSustainability",
+                               "SSP2" ~ "SSP2:\nMiddle of the Road",
+                               "SSP3" ~ "SSP3:\nRegional Rivalry",
+                               "SSP4" ~ "SSP4:\nInequality",
+                               "SSP5" ~ "SSP5:\nFossil-Fueled Development"))
 
 ggplot(data=plotData, aes(x=Year, y = percDiff, color=Commodity, fill=Commodity)) +
   geom_line(linewidth = 1) +
@@ -170,11 +176,11 @@ ggplot(data=plotData, aes(x=Year, y = percDiff, color=Commodity, fill=Commodity)
   geom_hline(yintercept = 0, color = "#333333", linetype="dashed")+
   theme_minimal()+
   theme(
-    strip.text = element_text(size = 26), 
-    text = element_text(size=26),
-    axis.text.x = element_text(size = 20),
-    axis.text.y = element_text(size = 20),
-    legend.text = element_text(size = 24))+
+    strip.text = element_text(size = 18), 
+    text = element_text(size=18),
+    axis.text.x = element_text(size = 16),
+    axis.text.y = element_text(size = 16),
+    legend.text = element_text(size = 16))+
   facet_wrap(~Ensemble)+
   scale_color_hue(labels=c("No inequality" = "Average Income", "Inequality"="Income deciles"))+
   scale_fill_hue(labels=c("No inequality" = "Average Income", "Inequality"="Income deciles"))+
@@ -237,3 +243,5 @@ si = totalDemand_combined %>% mutate(Commodity="All commodities") %>%
   mutate(diff=100*(meanKcal_Deciles - meanKcal_AvgIncome)/meanKcal_Deciles) %>%
   mutate(diff=round(diff,2)) %>%
   select(-Year)
+
+
