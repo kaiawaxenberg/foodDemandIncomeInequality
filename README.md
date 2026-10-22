@@ -12,8 +12,9 @@ R (version 4.0 or higher)
 RStudio (optional, for easier interaction with R scripts and notebooks)
 Required R packages:
 - dplyr
-- ggplot2
+- ggplot2 and scales
 - data.table
+- maps and mapdata
 
 
 ## Contact
