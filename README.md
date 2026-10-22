@@ -11,7 +11,7 @@ To run the scripts in this repository, you will need to have the following softw
 R (version 4.0 or higher)
 RStudio (optional, for easier interaction with R scripts and notebooks)
 Required R packages:
-- dplyr and tidyr
+- dplyr
 - ggplot2 and scales
 - data.table
 - maps and mapdata
