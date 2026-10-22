@@ -15,6 +15,7 @@ Required R packages:
 - ggplot2 and scales
 - data.table
 - maps and mapdata
+- DescTools
 
 
 ## Contact
